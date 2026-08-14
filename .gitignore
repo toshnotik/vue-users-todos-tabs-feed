@@ -1,0 +1,21 @@
+node_modules
+dist
+*.tsbuildinfo
+*-check.png
+
+.env
+.env.*
+!.env.example
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.DS_Store
+.idea
+.vscode
+
+AGENTS.md
+docs
+тестовое задание.txt
