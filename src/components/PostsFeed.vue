@@ -40,7 +40,9 @@ onBeforeUnmount(() => {
 
     <div v-if="error" class="notice notice--error">
       <span>{{ error }}</span>
-      <button class="button button--secondary" type="button" @click="postsStore.loadMorePosts">Повторить</button>
+      <button class="button button--secondary" type="button" @click="postsStore.loadMorePosts">
+        Повторить
+      </button>
     </div>
 
     <p v-if="isEmpty" class="empty-text">Постов пока нет</p>

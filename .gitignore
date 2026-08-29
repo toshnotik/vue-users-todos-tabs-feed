@@ -2,6 +2,7 @@ node_modules
 dist
 *.tsbuildinfo
 *-check.png
+image*.png
 
 .env
 .env.*

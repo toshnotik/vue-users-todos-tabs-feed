@@ -72,8 +72,14 @@ function saveEditing(id: string) {
         <template v-else>
           <span :class="{ done: todo.completed }">{{ todo.title }}</span>
           <div class="todo-actions">
-            <button class="text-button" type="button" @click="startEditing(todo.id, todo.title)">Изменить</button>
-            <button class="text-button text-button--danger" type="button" @click="todosStore.deleteTodo(todo.id)">
+            <button class="text-button" type="button" @click="startEditing(todo.id, todo.title)">
+              Изменить
+            </button>
+            <button
+              class="text-button text-button--danger"
+              type="button"
+              @click="todosStore.deleteTodo(todo.id)"
+            >
               Удалить
             </button>
           </div>

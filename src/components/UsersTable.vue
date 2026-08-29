@@ -30,6 +30,14 @@ const columns = [
   { key: 'registeredAt', label: 'Дата регистрации' },
 ] as const
 
+function getSortLabel(key: (typeof columns)[number]['key']) {
+  if (sortKey.value !== key) {
+    return 'Сортировать по возрастанию'
+  }
+
+  return sortDirection.value === 'asc' ? 'Сортировать по убыванию' : 'Сортировать по возрастанию'
+}
+
 function handleRoleChange(event: Event) {
   usersStore.setRoleFilter((event.target as HTMLSelectElement).value as UserRole | 'all')
 }
@@ -65,7 +73,12 @@ onMounted(() => {
         <p>Данные из JSONPlaceholder с локальными полями роли, статуса и даты регистрации.</p>
       </div>
 
-      <button class="button button--secondary" type="button" :disabled="isLoading" @click="usersStore.loadUsers">
+      <button
+        class="button button--secondary"
+        type="button"
+        :disabled="isLoading"
+        @click="usersStore.loadUsers"
+      >
         Обновить
       </button>
     </div>
@@ -99,13 +112,27 @@ onMounted(() => {
     </div>
 
     <div class="table-shell">
-      <table>
+      <table aria-label="Таблица пользователей">
         <thead>
           <tr>
-            <th v-for="column in columns" :key="column.key" scope="col">
-              <button class="sort-button" type="button" @click="usersStore.setSort(column.key)">
+            <th
+              v-for="column in columns"
+              :key="column.key"
+              scope="col"
+              :aria-sort="
+                sortKey === column.key ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined
+              "
+            >
+              <button
+                class="sort-button"
+                type="button"
+                :aria-label="`${column.label}: ${getSortLabel(column.key)}`"
+                @click="usersStore.setSort(column.key)"
+              >
                 {{ column.label }}
-                <span v-if="sortKey === column.key">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                <span v-if="sortKey === column.key" aria-hidden="true">{{
+                  sortDirection === 'asc' ? '↑' : '↓'
+                }}</span>
               </button>
             </th>
           </tr>
@@ -142,7 +169,12 @@ onMounted(() => {
     <div class="pagination">
       <span>Найдено: {{ filteredUsers.length }}</span>
       <div class="pagination__controls">
-        <button class="button button--secondary" type="button" :disabled="currentPage === 1" @click="currentPage -= 1">
+        <button
+          class="button button--secondary"
+          type="button"
+          :disabled="currentPage === 1"
+          @click="currentPage -= 1"
+        >
           Назад
         </button>
         <span>{{ currentPage }} / {{ totalPages }}</span>

@@ -8,6 +8,7 @@ Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlac
 - Todo list with create, edit, delete, complete and localStorage persistence.
 - Tabs with active tab stored in the URL query parameter.
 - Feedback form with live validation, submit state and localStorage persistence.
+- Accessible modal focus handling and keyboard-friendly tabs.
 - Infinite posts feed with Intersection Observer and skeleton loading.
 - Reusable modal with slot content, Teleport, overlay close and ESC close.
 
@@ -16,9 +17,17 @@ Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlac
 - Vue 3
 - TypeScript
 - Pinia
+- VeeValidate
 - SCSS
 - Vite
 - JSONPlaceholder API
+
+## Quality
+
+- TypeScript strict mode.
+- ESLint and Prettier checks.
+- GitHub Actions CI for linting, formatting and production build.
+- Keyboard and focus states for interactive UI.
 
 ## Getting Started
 
@@ -38,6 +47,18 @@ Build for production:
 
 ```bash
 npm run build
+```
+
+Run linting:
+
+```bash
+npm run lint
+```
+
+Check formatting:
+
+```bash
+npm run format:check
 ```
 
 Preview the production build:

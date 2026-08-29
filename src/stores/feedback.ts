@@ -1,78 +1,55 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-type FeedbackStatus = 'idle' | 'submitting' | 'success'
-
-interface FeedbackForm {
+export interface FeedbackForm {
   name: string
   email: string
   message: string
 }
 
+type FeedbackStatus = 'idle' | 'submitting' | 'success'
+
 const STORAGE_KEY = 'eme.feedback'
+const FEEDBACK_URL = 'https://jsonplaceholder.typicode.com/posts'
 
 export const useFeedbackStore = defineStore('feedback', () => {
-  const form = ref<FeedbackForm>({
-    name: '',
-    email: '',
-    message: '',
-  })
-  const touched = ref<Record<keyof FeedbackForm, boolean>>({
-    name: false,
-    email: false,
-    message: false,
-  })
   const status = ref<FeedbackStatus>('idle')
+  const error = ref<string | null>(null)
 
-  const errors = computed(() => ({
-    name: form.value.name.trim().length < 2 ? 'Введите имя не короче 2 символов' : '',
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email) ? '' : 'Введите корректный email',
-    message: form.value.message.trim().length < 10 ? 'Сообщение должно быть не короче 10 символов' : '',
-  }))
-
-  const isValid = computed(() => Object.values(errors.value).every((error) => !error))
-
-  function touchField(field: keyof FeedbackForm) {
-    touched.value[field] = true
+  function resetStatus() {
     status.value = 'idle'
+    error.value = null
   }
 
-  async function submitForm() {
-    touched.value = {
-      name: true,
-      email: true,
-      message: true,
-    }
-
-    if (!isValid.value) {
-      return
-    }
-
+  async function submitFeedback(form: FeedbackForm) {
     status.value = 'submitting'
+    error.value = null
 
-    await new Promise((resolve) => window.setTimeout(resolve, 700))
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...form.value, submittedAt: new Date().toISOString() }))
+    try {
+      const response = await fetch(FEEDBACK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
 
-    form.value = {
-      name: '',
-      email: '',
-      message: '',
+      if (!response.ok) {
+        throw new Error('Не удалось отправить сообщение')
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...form, submittedAt: new Date().toISOString() }))
+      status.value = 'success'
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Не удалось отправить сообщение'
+      status.value = 'idle'
     }
-    touched.value = {
-      name: false,
-      email: false,
-      message: false,
-    }
-    status.value = 'success'
   }
 
   return {
-    form,
-    touched,
     status,
-    errors,
-    isValid,
-    touchField,
-    submitForm,
+    error,
+    resetStatus,
+    submitFeedback,
   }
 })

@@ -8,7 +8,16 @@ const STORAGE_KEY = 'eme.todos'
 function readTodos(): Todo[] {
   const savedTodos = localStorage.getItem(STORAGE_KEY)
 
-  return savedTodos ? JSON.parse(savedTodos) : []
+  if (!savedTodos) {
+    return []
+  }
+
+  try {
+    return JSON.parse(savedTodos) as Todo[]
+  } catch {
+    localStorage.removeItem(STORAGE_KEY)
+    return []
+  }
 }
 
 export const useTodosStore = defineStore('todos', () => {
