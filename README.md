@@ -1,6 +1,14 @@
 # Frontend Test Assignment
 
+[![CI](https://github.com/toshnotik/vue-users-todos-tabs-feed/actions/workflows/ci.yml/badge.svg)](https://github.com/toshnotik/vue-users-todos-tabs-feed/actions/workflows/ci.yml)
+
 Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlaceholder REST API.
+
+## Demo
+
+[Live demo](https://toshnotik.github.io/vue-users-todos-tabs-feed/)
+
+![Application screenshot](public/app-screenshot.png)
 
 ## Features
 

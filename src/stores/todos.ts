@@ -1,27 +1,13 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
+import { useLocalStorage } from '@/composables/useLocalStorage'
 import type { Todo, TodoFilter } from '@/types/todo'
 
 const STORAGE_KEY = 'eme.todos'
 
-function readTodos(): Todo[] {
-  const savedTodos = localStorage.getItem(STORAGE_KEY)
-
-  if (!savedTodos) {
-    return []
-  }
-
-  try {
-    return JSON.parse(savedTodos) as Todo[]
-  } catch {
-    localStorage.removeItem(STORAGE_KEY)
-    return []
-  }
-}
-
 export const useTodosStore = defineStore('todos', () => {
-  const todos = ref<Todo[]>(readTodos())
+  const todos = useLocalStorage<Todo[]>(STORAGE_KEY, [])
   const filter = ref<TodoFilter>('all')
 
   const visibleTodos = computed(() => {
@@ -36,10 +22,6 @@ export const useTodosStore = defineStore('todos', () => {
     return todos.value
   })
 
-  function saveTodos() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value))
-  }
-
   function addTodo(title: string) {
     const trimmedTitle = title.trim()
 
@@ -52,7 +34,6 @@ export const useTodosStore = defineStore('todos', () => {
       title: trimmedTitle,
       completed: false,
     })
-    saveTodos()
   }
 
   function updateTodo(id: string, title: string) {
@@ -63,7 +44,6 @@ export const useTodosStore = defineStore('todos', () => {
     }
 
     todo.title = title.trim()
-    saveTodos()
   }
 
   function toggleTodo(id: string) {
@@ -74,12 +54,10 @@ export const useTodosStore = defineStore('todos', () => {
     }
 
     todo.completed = !todo.completed
-    saveTodos()
   }
 
   function deleteTodo(id: string) {
     todos.value = todos.value.filter((todo) => todo.id !== id)
-    saveTodos()
   }
 
   return {

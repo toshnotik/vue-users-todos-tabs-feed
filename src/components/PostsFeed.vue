@@ -1,32 +1,19 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import { useIntersectionObserver } from '@/composables/useIntersectionObserver'
 import { usePostsStore } from '@/stores/posts'
 
 const postsStore = usePostsStore()
 const { posts, isLoading, error, hasMore, isEmpty } = storeToRefs(postsStore)
 const sentinel = ref<HTMLElement | null>(null)
 
-let observer: IntersectionObserver | null = null
-
 onMounted(() => {
   postsStore.loadMorePosts()
-
-  observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      postsStore.loadMorePosts()
-    }
-  })
-
-  if (sentinel.value) {
-    observer.observe(sentinel.value)
-  }
 })
 
-onBeforeUnmount(() => {
-  observer?.disconnect()
-})
+useIntersectionObserver(sentinel, postsStore.loadMorePosts)
 </script>
 
 <template>

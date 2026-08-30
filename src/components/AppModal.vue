@@ -69,6 +69,7 @@ watch(
       previouslyFocusedElement?.focus()
     }
   },
+  { immediate: true },
 )
 
 onBeforeUnmount(() => {

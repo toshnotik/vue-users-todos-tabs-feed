@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+
+import { useQueryParam } from '@/composables/useQueryParam'
 
 const tabs = [
   {
@@ -17,9 +19,8 @@ const tabs = [
 
 type TabId = (typeof tabs)[number]['id']
 
-const query = new URLSearchParams(window.location.search)
-const initialTab = tabs.some((tab) => tab.id === query.get('tab')) ? (query.get('tab') as TabId) : 'summary'
-const activeTab = ref<TabId>(initialTab)
+const tabIds = tabs.map((tab) => tab.id)
+const { value: activeTab, setValue: selectTab } = useQueryParam<TabId>('tab', 'summary', tabIds)
 
 const activeContent = computed(() => tabs.find((tab) => tab.id === activeTab.value))
 
@@ -29,14 +30,6 @@ function getTabButtonId(id: TabId) {
 
 function getTabPanelId(id: TabId) {
   return `tab-panel-${id}`
-}
-
-function selectTab(id: TabId) {
-  activeTab.value = id
-
-  const params = new URLSearchParams(window.location.search)
-  params.set('tab', id)
-  window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
 }
 
 function selectNextTab(direction: 1 | -1) {
