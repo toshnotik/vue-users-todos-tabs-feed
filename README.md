@@ -34,7 +34,7 @@ Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlac
 
 - TypeScript strict mode.
 - ESLint and Prettier checks.
-- GitHub Actions CI for linting, formatting and production build.
+- GitHub Actions CI for linting, formatting, tests and production build.
 - Keyboard and focus states for interactive UI.
 
 ## Getting Started
@@ -61,6 +61,12 @@ Run linting:
 
 ```bash
 npm run lint
+```
+
+Run tests:
+
+```bash
+npm run test
 ```
 
 Check formatting:
