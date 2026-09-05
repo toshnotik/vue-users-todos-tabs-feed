@@ -50,6 +50,19 @@ function mountUsersTable() {
   })
 }
 
+function mountUsersTableWithFailedRequest() {
+  const pinia = createPinia()
+  setActivePinia(pinia)
+
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }))
+
+  return mount(UsersTable, {
+    global: {
+      plugins: [pinia],
+    },
+  })
+}
+
 describe('UsersTable', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
@@ -64,6 +77,15 @@ describe('UsersTable', () => {
     expect(wrapper.text()).toContain('Найдено: 20')
   })
 
+  it('filters users by status', async () => {
+    const wrapper = mountUsersTable()
+
+    await flushPromises()
+    await wrapper.findAll('select')[1].setValue('Ожидает')
+
+    expect(wrapper.text()).toContain('Найдено: 20')
+  })
+
   it('updates aria-sort when sorting changes', async () => {
     const wrapper = mountUsersTable()
 
@@ -71,5 +93,14 @@ describe('UsersTable', () => {
     await wrapper.get('button[aria-label^="Email"]').trigger('click')
 
     expect(wrapper.get('th[aria-sort="ascending"]').text()).toContain('Email')
+  })
+
+  it('shows a retryable error when users cannot be loaded', async () => {
+    const wrapper = mountUsersTableWithFailedRequest()
+
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Не удалось загрузить пользователей')
+    expect(wrapper.get('.notice--error button').text()).toBe('Повторить')
   })
 })

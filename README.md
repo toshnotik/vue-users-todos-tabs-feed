@@ -8,6 +8,8 @@ Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlac
 
 [Live demo](https://toshnotik.github.io/vue-users-todos-tabs-feed/)
 
+## Screenshot
+
 ![Application screenshot](public/app-screenshot.png)
 
 ## Features
@@ -34,7 +36,7 @@ Vue 3 test assignment with TypeScript, Pinia, Composition API, SCSS and JSONPlac
 
 - TypeScript strict mode.
 - ESLint and Prettier checks.
-- GitHub Actions CI for linting, formatting, tests and production build.
+- GitHub Actions CI for linting, type checking, formatting, tests and production build.
 - Keyboard and focus states for interactive UI.
 
 ## Getting Started
@@ -63,6 +65,12 @@ Run linting:
 npm run lint
 ```
 
+Run type checking:
+
+```bash
+npm run typecheck
+```
+
 Run tests:
 
 ```bash
@@ -84,3 +92,5 @@ npm run preview
 ## Notes
 
 JSONPlaceholder returns only 10 users, so the API layer expands that data to 60 table rows. This keeps the real `/users` endpoint in use while making pagination and page-size controls easy to test.
+
+Authentication, realtime updates and push notifications are outside the assignment scope. Offline behavior is represented by clear network error states with retry actions for API-driven sections.

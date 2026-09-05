@@ -22,4 +22,15 @@ describe('TabsPanel', () => {
     expect(window.location.search).toBe('?tab=ui')
     expect(wrapper.get('[role="tabpanel"]').text()).toContain('адаптивной версткой')
   })
+
+  it('connects tabs with the active panel for accessibility', () => {
+    window.history.replaceState(null, '', '/?tab=summary')
+
+    const wrapper = mount(TabsPanel)
+    const selectedTab = wrapper.get('[role="tab"][aria-selected="true"]')
+    const panel = wrapper.get('[role="tabpanel"]')
+
+    expect(selectedTab.attributes('aria-controls')).toBe(panel.attributes('id'))
+    expect(panel.attributes('aria-labelledby')).toBe(selectedTab.attributes('id'))
+  })
 })
