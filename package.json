@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
-    "typecheck": "vue-tsc -b",
+    "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest run",
     "format": "prettier --write .",
